@@ -1,0 +1,6 @@
+---
+
+- name: Create HPA
+  shell: kubectl apply -f HorizontalPodAutoscaler.yaml
+  args:
+    chdir: ../k8s/app/

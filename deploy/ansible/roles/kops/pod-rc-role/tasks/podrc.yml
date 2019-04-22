@@ -1,0 +1,36 @@
+---
+
+- name: Fetching aws account id
+  shell: aws sts get-caller-identity --output text --query 'Account'
+  register: accountid1
+
+- name: Fetching ACM arn
+  shell: aws acm list-certificates --output text --query 'CertificateSummaryList[0].CertificateArn'
+  register: acmarn
+
+- name: Run Secret file
+  shell: kubectl create secret generic my-secret --from-file=../Secrets.json
+
+- name: Run Config file
+  shell: kubectl create configmap my-config --from-file=../config.json
+
+
+- name: Create Deployment
+  vars:
+    imageTag: ""
+  shell: cat csye7374-deployment.yaml | sed "s/xyz/{{accountid1.stdout}}/"  | kubectl apply -f -
+  args:
+    chdir: ../k8s/app/
+
+- name: Replace
+  replace:
+    path: ../k8s/app/Service.yaml
+    regexp: 'arn1'
+    replace: '{{acmarn.stdout}}'
+
+- name: Create service
+  shell:  kubectl apply -f Service.yaml
+  args:
+    chdir: ../k8s/app/
+
+    

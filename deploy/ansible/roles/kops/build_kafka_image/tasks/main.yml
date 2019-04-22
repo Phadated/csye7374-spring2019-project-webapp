@@ -1,0 +1,14 @@
+---
+# tasks file for build_kafka_image
+
+- name: login into ecr registry
+  shell: $(aws ecr get-login --no-include-email --region us-east-1)
+  register: pwd
+
+- debug:
+    msg: "Password is {{pwd.stdout}}"  
+
+- name: build image
+  shell: docker build --no-cache -t  init-kafka -f Dockerfile.init.kafka .
+  args:
+    chdir: ../webapp/

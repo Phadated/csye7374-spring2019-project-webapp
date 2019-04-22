@@ -1,0 +1,8 @@
+---
+
+- hosts: localhost
+  connection: local
+  tasks:
+
+  - import_role: 
+      name: kops/pod-rc-terminate-role

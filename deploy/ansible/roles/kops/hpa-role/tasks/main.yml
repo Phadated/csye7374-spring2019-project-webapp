@@ -1,0 +1,4 @@
+---
+# tasks file for hpa-role
+
+- include_tasks: hpa.yml

@@ -1,0 +1,13 @@
+---
+
+- name: Delete config
+  shell: kubectl delete configmap my-config
+
+- name: Delete secrets
+  shell: kubectl delete secret my-secret
+
+- name: Delete deployment
+  shell: kubectl delete deployment csye7374-assign3-rc
+
+- name: Delete services
+  shell: kubectl delete service csye7374-lb-svc

@@ -1,0 +1,5 @@
+---
+# defaults file for cluster-setup-role
+- name: Fetching cluster name from Route53
+  shell: aws route53 list-hosted-zones | jq -r '.HostedZones[1].Name'
+  register: clustername
