@@ -1,0 +1,103 @@
+apiVersion: apps/v1               
+kind: Deployment                    
+metadata:
+  name: csye7374-assign3-rc      
+spec:
+  replicas: 3
+  minReadySeconds: 10
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+    type: RollingUpdate
+  selector:
+    matchLabels:
+      app: csye7374-webapp
+  template:
+    metadata:
+      labels:
+        app: csye7374-webapp
+    spec:
+      volumes:
+      - name: my-config-mount
+        configMap:
+          name: my-config
+      - name: my-secret-mount
+        secret:
+          secretName: my-secret
+      initContainers:
+      - name: init-container-01
+        imagePullPolicy: Always
+        image: xyz.dkr.ecr.us-east-1.amazonaws.com/init-db:latest
+        volumeMounts:
+          - name: my-secret-mount
+            mountPath: /app/secret
+        resources:
+          limits:
+            memory: "1.0Gi"
+            cpu: "500m"
+          requests:
+            memory: "1.0Gi"
+            cpu: "500m"
+      - name: init-container-02
+        imagePullPolicy: Always
+        image: xyz.dkr.ecr.us-east-1.amazonaws.com/init-kafka:latest
+        volumeMounts:
+          - name: my-secret-mount
+            mountPath: /app/secret
+        resources:
+          limits:
+            memory: "256Mi"
+            cpu: "500m"
+          requests:
+            memory: "256Mi"
+            cpu: "500m"
+      containers:
+      - image: xyz.dkr.ecr.us-east-1.amazonaws.com/csye7374:latest     
+        name: csye7374
+        command: ["/bin/sh","-c"]
+        args: ["cd /app/config; pwd; cd ../; node app.js"]
+        volumeMounts:
+          - name: my-config-mount
+            mountPath: /app/config
+          - name: my-secret-mount
+            mountPath: /app/secret
+        imagePullPolicy: Always  
+        livenessProbe:
+          httpGet:
+            path: /s3test
+            port: 5000
+          initialDelaySeconds: 5
+          periodSeconds: 5
+          timeoutSeconds: 10
+          httpGet:
+            path: /dbTest
+            port: 5000
+          initialDelaySeconds: 5
+          periodSeconds: 5
+          timeoutSeconds: 30
+        readinessProbe:
+          httpGet:
+            path: /s3test
+            port: 5000
+          initialDelaySeconds: 5
+          periodSeconds: 5
+          timeoutSeconds: 10
+          httpGet:
+            path: /dbTest
+            port: 5000
+          initialDelaySeconds: 5
+          periodSeconds: 5
+          timeoutSeconds: 30
+        ports:
+        - containerPort: 5000  
+          protocol: TCP
+        resources:
+          limits:
+            memory: "256Mi"
+            cpu: "500m"
+          requests:
+            memory: "256Mi"
+            cpu: "500m"
+      
+
