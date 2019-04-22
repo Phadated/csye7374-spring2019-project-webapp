@@ -1,0 +1,6 @@
+tests["Status code is 200"] = responseCode.code ===200;
+tests["Response time is less than 200ms"] = responseTime < 200;
+tests["Status code is 400"] = responseCode.code ===400;
+tests["Status code is 401"] = responseCode.code ===401;
+tests["Status code is 500"] = responseCode.code ===500;
+tests["Status code is 501"] = responseCode.code ===501;
