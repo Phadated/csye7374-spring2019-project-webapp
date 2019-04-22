@@ -1,0 +1,11 @@
+FROM confluentinc/cp-kafka:5.2.1
+
+WORKDIR /
+COPY ./scriptkafka.sh /usr/local/bin/docker-entrypoint.sh
+
+RUN apt-get update
+RUN apt-get install jq
+RUN ln -s usr/local/bin/docker-entrypoint.sh /
+
+
+ENTRYPOINT ["docker-entrypoint.sh"]
