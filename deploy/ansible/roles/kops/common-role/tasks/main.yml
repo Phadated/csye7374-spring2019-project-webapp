@@ -1,0 +1,3 @@
+---
+# tasks file for cluster-teardown-role
+- include_tasks: common.yml

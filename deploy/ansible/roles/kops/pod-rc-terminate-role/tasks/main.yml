@@ -1,0 +1,3 @@
+---
+# tasks file for pod-rc-terminate-role
+- include_tasks: podrcterminate.yml

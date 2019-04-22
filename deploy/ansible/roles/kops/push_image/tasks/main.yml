@@ -1,0 +1,23 @@
+---
+# tasks file for push_image
+
+- name: Fetching aws account id
+  shell: aws sts get-caller-identity --output text --query 'Account'
+  register: accountid
+
+- name: login into ecr registry
+  shell: $(aws ecr get-login --no-include-email --region us-east-1)
+  register: pwd
+
+- name: push image to repository
+  shell: docker tag csye7374:latest {{accountid.stdout}}.dkr.ecr.us-east-1.amazonaws.com/csye7374:latest
+  args:
+    chdir: ../webapp/
+
+- debug: 
+    msg: "Hi AWS {{accountid.stdout}}"
+
+- name: push image to aws repo
+  shell: docker push {{accountid.stdout}}.dkr.ecr.us-east-1.amazonaws.com/csye7374:latest
+  args:
+    chdir: ../webapp/
