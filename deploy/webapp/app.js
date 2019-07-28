@@ -42,7 +42,7 @@ var params = {
   };
 
 
-console.log("hi");
+console.log("hi hello");
 
 const db = mysql.createConnection ({
     host: secret.DB_HOST,
