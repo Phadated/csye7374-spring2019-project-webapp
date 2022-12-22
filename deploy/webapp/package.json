@@ -18,7 +18,7 @@
     "email-validator": "^2.0.4",
     "express": "^4.16.3",
     "express-fileupload": "^1.0.0-alpha.1",
-    "jsonwebtoken": "^8.3.0",
+    "jsonwebtoken": "^9.0.0",
     "mkdirp": "^0.5.1",
     "mysql": "^2.16.0",
     "node-statsd": "^0.1.1",
